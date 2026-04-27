@@ -21,9 +21,9 @@ This document defines the bootstrap sequence and dependency order for bringing I
 - [x] Roadmap with milestones
 - [x] Agent working rules
 - [x] Initial RFCs and ADRs
-- [ ] PR templates and issue templates
-- [ ] First program epic: Minimum Operating Loop
-- [ ] Cross-repo contract issues created
+- [x] PR templates and issue templates
+- [x] First program epic: Minimum Operating Loop
+- [x] Cross-repo contract issues created
 
 ## Phase 1 — Governance and Protocol Contracts
 
