@@ -1,5 +1,5 @@
 name: Epic
- description: Multi-step or cross-repository work
+description: Multi-step or cross-repository work
 title: '[Program] Epic title'
 labels: [epic]
 body:
