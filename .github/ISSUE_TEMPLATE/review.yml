@@ -1,5 +1,5 @@
 name: Review
- description: Review or audit task
+description: Review or audit task
 title: '[Layer] Review: brief description'
 labels: [review]
 body:
