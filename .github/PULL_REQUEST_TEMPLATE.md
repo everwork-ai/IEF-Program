@@ -1,28 +1,33 @@
 ## Summary
 
+Brief description of what this PR does.
+
 ## Linked Issue
 
-Closes #
+Closes #{issue_number}
 
-## Layer
+## Files Created/Updated
 
-- [ ] Program
-- [ ] Governance
-- [ ] Knowledge
-- [ ] Operations
-- [ ] Protocol
-- [ ] Runners
-- [ ] Adapters
+- `path/to/file` — description
+
+## Governance Profile
+
+- [ ] Design-Lite
+- [ ] Contract-Critical
+- [ ] Implementation-Controlled
 
 ## Evidence
 
-## Risk
+Describe tests, dry-runs, screenshots, or other evidence that this change works as intended.
 
-- [ ] Low
-- [ ] Medium
-- [ ] High
-- [ ] Critical
+## Risks
+
+What could go wrong? What are the side effects?
 
 ## Rollback Plan
 
-## Notes for Reviewer
+How do we revert if this causes problems?
+
+## Reviewer Notes
+
+Anything the reviewer should pay special attention to.
