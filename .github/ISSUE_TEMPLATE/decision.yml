@@ -1,5 +1,5 @@
 name: Decision
- description: Architecture or policy decision
+description: Architecture or policy decision
 title: '[Program] Decision: brief description'
 labels: [decision]
 body:
