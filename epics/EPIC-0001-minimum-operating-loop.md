@@ -77,12 +77,12 @@ IEF-Program Epic (this document)
 
 | Issue | Repository | Description | Status |
 |---|---|---|---|
-| TBD | IEF-Governance | Define bootstrap governance profiles for IEF v0 | Not created |
-| TBD | IEF-Protocol | Define IEF v0 shared object model | Not created |
-| TBD | IEF-Operations | Define IEF v0 task and run lifecycle | Not created |
-| TBD | IEF-Runners | Define runner interface v0 and ClaudeCode runner boundary | Not created |
-| TBD | IEF-Knowledge | Define context pack and run summary v0 | Not created |
-| TBD | IEF-Adapters | Define host adapter contract v0 | Not created |
+| [IEF-Governance#2](https://github.com/everwork-ai/IEF-Governance/issues/2) | IEF-Governance | Define bootstrap governance profiles for IEF v0 | Created / Ready for contract draft |
+| [IEF-Protocol#2](https://github.com/everwork-ai/IEF-Protocol/issues/2) | IEF-Protocol | Define IEF v0 shared object model | Created / Ready for contract draft |
+| [IEF-Operations#2](https://github.com/everwork-ai/IEF-Operations/issues/2) | IEF-Operations | Define IEF v0 task and run lifecycle | Created / Ready for contract draft |
+| [IEF-Runners#2](https://github.com/everwork-ai/IEF-Runners/issues/2) | IEF-Runners | Define runner interface v0 and ClaudeCode runner boundary | Created / Ready for contract draft |
+| [IEF-Knowledge#2](https://github.com/everwork-ai/IEF-Knowledge/issues/2) | IEF-Knowledge | Define context pack and run summary v0 | Created / Ready for contract draft |
+| [IEF-Adapters#2](https://github.com/everwork-ai/IEF-Adapters/issues/2) | IEF-Adapters | Define host adapter contract v0 | Created / Ready for contract draft |
 
 ## Governance
 
