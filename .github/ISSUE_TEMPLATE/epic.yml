@@ -1,0 +1,64 @@
+name: Epic
+ description: Multi-step or cross-repository work
+title: '[Program] Epic title'
+labels: [epic]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Create a program-level epic for multi-step or cross-repository work.
+  - type: input
+    id: epic_title
+    attributes:
+      label: Epic Title
+      placeholder: 'Short, descriptive title'
+    validations:
+      required: true
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: What is the high-level objective?
+      placeholder: 'One-sentence goal'
+    validations:
+      required: true
+  - type: textarea
+    id: success_criteria
+    attributes:
+      label: Success Criteria
+      description: How do we know this epic is complete?
+      placeholder: '- [ ] Criterion 1\n- [ ] Criterion 2'
+    validations:
+      required: true
+  - type: textarea
+    id: child_issues
+    attributes:
+      label: Child Issues
+      description: List child issues by repository
+      placeholder: '| Issue | Repo | Description | Status |\n|---|---|---|---|\n| # | IEF-Operations | ... | Not started |'
+  - type: textarea
+    id: dependency_order
+    attributes:
+      label: Dependency Order
+      description: What must happen in what order?
+      placeholder: '1. Protocol draft\n2. Operations lifecycle\n3. Runners interface'
+  - type: dropdown
+    id: governance_profile
+    attributes:
+      label: Governance Profile
+      options:
+        - Design-Lite
+        - Contract-Critical
+        - Implementation-Controlled
+    validations:
+      required: true
+  - type: textarea
+    id: risks
+    attributes:
+      label: Risks
+      description: What could go wrong?
+  - type: textarea
+    id: timeline
+    attributes:
+      label: Timeline
+      description: Expected phases and dates
