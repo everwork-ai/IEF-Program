@@ -93,7 +93,7 @@ Open a pull request when ready for review.
 
 **PR must include:**
 - Summary of changes
-- Linked issue (use `Closes #{number}`)
+- Linked issue (use `Closes #123`, replacing `123` with the actual issue number)
 - Files created/updated list
 - Governance profile used
 - Evidence (tests, dry-runs, screenshots)

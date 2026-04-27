@@ -4,7 +4,8 @@ Brief description of what this PR does.
 
 ## Linked Issue
 
-Closes #{issue_number}
+Closes #
+<!-- Replace with the actual issue number, for example: Closes #4 -->
 
 ## Files Created/Updated
 
