@@ -1,5 +1,5 @@
 name: Task
- description: Standard work item for IEF
+description: Standard work item for IEF
 title: '[Layer] Brief description'
 labels: []
 body:
