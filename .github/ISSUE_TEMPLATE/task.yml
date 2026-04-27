@@ -1,0 +1,75 @@
+name: Task
+ description: Standard work item for IEF
+title: '[Layer] Brief description'
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Create a standard work item. All tasks must be added to IEF Command Center.
+  - type: input
+    id: layer
+    attributes:
+      label: Layer
+      description: Which IEF layer does this belong to?
+      placeholder: 'Program / Governance / Knowledge / Operations / Protocol / Runners / Adapters'
+    validations:
+      required: true
+  - type: input
+    id: target_repo
+    attributes:
+      label: Target Repository
+      description: Which repository will this be implemented in?
+      placeholder: 'IEF-Program / IEF-Governance / IEF-Knowledge / IEF-Operations / IEF-Protocol / IEF-Runners / IEF-Adapters'
+    validations:
+      required: true
+  - type: dropdown
+    id: governance_profile
+    attributes:
+      label: Governance Profile
+      description: Which governance profile applies?
+      options:
+        - Design-Lite
+        - Contract-Critical
+        - Implementation-Controlled
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What needs to be done?
+      placeholder: 'Clear description of the task'
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: Acceptance Criteria
+      description: How do we know this is done?
+      placeholder: '- [ ] Criterion 1\n- [ ] Criterion 2'
+    validations:
+      required: true
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies
+      description: What must be completed first?
+      placeholder: 'Issue or PR references'
+  - type: dropdown
+    id: risk
+    attributes:
+      label: Risk Level
+      options:
+        - Low
+        - Medium
+        - High
+        - Critical
+    validations:
+      required: true
+  - type: input
+    id: owner_agent
+    attributes:
+      label: Owner Agent
+      description: Which AI agent or human owns this?
+      placeholder: 'GPT / Claude / Codex / Qoder / OpenClaw / Human'
