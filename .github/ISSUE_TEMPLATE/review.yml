@@ -1,0 +1,55 @@
+name: Review
+description: Review or audit task
+title: '[Layer] Review: brief description'
+labels: [review]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template for review, audit, or inspection tasks.
+  - type: input
+    id: target
+    attributes:
+      label: Review Target
+      description: What is being reviewed?
+      placeholder: 'Issue, PR, document, or code'
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Review Scope
+      description: What aspects are in scope?
+      placeholder: '- [ ] Correctness\n- [ ] Boundary compliance\n- [ ] Evidence quality'
+    validations:
+      required: true
+  - type: dropdown
+    id: review_type
+    attributes:
+      label: Review Type
+      options:
+        - Design Review
+        - Code Review
+        - Contract Review
+        - Audit
+        - Post-Mortem
+    validations:
+      required: true
+  - type: textarea
+    id: criteria
+    attributes:
+      label: Acceptance Criteria
+      description: What must be true for this review to pass?
+      placeholder: '- [ ] All checklists passed\n- [ ] No critical findings\n- [ ] Follow-up issues created for minor findings'
+    validations:
+      required: true
+  - type: dropdown
+    id: governance_profile
+    attributes:
+      label: Governance Profile
+      options:
+        - Design-Lite
+        - Contract-Critical
+        - Implementation-Controlled
+    validations:
+      required: true

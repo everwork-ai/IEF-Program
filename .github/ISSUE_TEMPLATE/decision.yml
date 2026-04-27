@@ -1,0 +1,55 @@
+name: Decision
+description: Architecture or policy decision
+title: '[Program] Decision: brief description'
+labels: [decision]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template for architecture or policy decisions that require an ADR.
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: What is the problem or opportunity?
+      placeholder: 'Background information'
+    validations:
+      required: true
+  - type: textarea
+    id: options
+    attributes:
+      label: Options Considered
+      description: What alternatives were evaluated?
+      placeholder: '| Option | Pros | Cons |\n|---|---|---|\n| Option A | ... | ... |\n| Option B | ... | ... |'
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: What is the recommended decision?
+      placeholder: 'Clear statement of the decision'
+    validations:
+      required: true
+  - type: textarea
+    id: consequences
+    attributes:
+      label: Consequences
+      description: What are the positive and negative impacts?
+      placeholder: '**Positive:** ...\n\n**Negative:** ...'
+    validations:
+      required: true
+  - type: input
+    id: related_rfc
+    attributes:
+      label: Related RFC
+      description: Link to related RFC if any
+      placeholder: 'RFC-XXXX'
+  - type: dropdown
+    id: governance_profile
+    attributes:
+      label: Governance Profile
+      options:
+        - Contract-Critical
+    validations:
+      required: true
