@@ -50,33 +50,129 @@ Chat history, session memory, and local agent state are ephemeral. They are not 
 
 **Rule:** No agent may operate above its authorized level without explicit Human Owner approval.
 
-## SYNC_FROM_GITHUB Mode
+## Program Controller Execution Contract
 
-Local agents (Qoder, Codex App/IDE, Claude Code, Gemini CLI, Antigravity, OpenClaw/Hermes-style agents) must run in `SYNC_FROM_GITHUB` mode.
+The Program Controller must adhere to the following rules when directing agents.
 
-### Startup Sequence
+### Write-before-act rule
 
-1. **Read target issue** — Identify the issue assigned to the current repo.
-2. **Read related PRs** — Identify open PRs linked to the target issue.
-3. **Read Program Controller comments** — Read the latest comments on IEF-Program#6 (or current program epic) for directives.
-4. **Read Codex review threads** — Check for unresolved review comments on the target PR.
-5. **Read PR body and changed files** — Understand the current state of delivery.
-6. **Read main branch docs/schemas/templates** — Understand existing conventions before modifying files.
+- Program Controller must write durable instructions into GitHub **before** expecting agents to act.
+- Program Controller must **not** assume agents saw chat messages.
 
-### Execution Rules
+### Directive placement rule
 
-1. **Only act when explicitly required.** If the latest GitHub comment is status/waiting/blocked, do not modify files.
-2. **Use feature branches.** Never push directly to `main`.
-3. **Only modify the current repo.** Do not touch sibling repos.
-4. **Only modify files explicitly requested.** Do not perform speculative refactoring.
-5. **Push and report.** After every modification, push to the PR branch and post a summary comment on the PR.
-6. **Reply to Codex findings.** If Codex posted review threads, reply to each one.
-7. **Trigger Codex review.** Comment `@codex review` after pushing changes.
-8. **Do not self-merge.** Wait for Program Controller or Human Owner.
-9. **Do not self-close issues.** Wait for Program Controller or Human Owner.
-10. **Do not start downstream work.** If a task requires another repo, report a blocker on the PR.
+- Repo-specific work needs a directive on the **target repo issue or PR**.
+- Cross-repo sequencing should also be recorded on the **Program issue or epic**.
+- **Program-level status updates alone are not enough to activate a repo worker.** Repo-specific work must have an explicit directive on the target repo issue or PR. If a directive appears only in `IEF-Program`, repo workers may treat it as context but not as authorization to modify files.
 
-### Agent-Specific Consumption Patterns
+### Directive labels
+
+Program Controller directives should use explicit labels so agents can classify them automatically:
+
+| Label | Meaning |
+|---|---|
+| `ACTION REQUIRED` | Agent must perform work now. |
+| `BLOCKED` | Agent must stop and report why. |
+| `WAITING_HUMAN` | Agent must pause until Human Owner responds. |
+| `WAITING_CODEX` | Agent must pause until Codex review completes. |
+| `READY_FOR_PROGRAM_REVIEW` | Agent has delivered; Program Controller should review. |
+| `READY_FOR_HUMAN_SIGNOFF` | Program Controller approves; Human Owner should sign off. |
+| `UNBLOCKED` | Previous blocker is resolved; agent may resume. |
+
+### Directive completeness
+
+A directive must include enough context for the agent to act **without chat history**:
+
+- Target repo
+- Target issue or PR
+- Allowed scope (what the agent may touch)
+- Expected output (what "done" looks like)
+- PR state rule (keep draft / do not merge / do not close issue)
+
+## Standard Directive Template
+
+Program Controller comments should follow this structure when issuing actionable directives:
+
+```markdown
+## Directive
+
+- **Target repo:** owner/repo
+- **Target issue:** #N
+- **Target PR:** #M (or "None — create one")
+- **Branch:** issue-N-description
+- **Context:** <why this work is needed>
+- **Allowed scope:** <files or areas the agent may modify>
+- **Files in scope:** <explicit file list if known>
+- **Expected output:** <what the agent must deliver>
+- **State rule:** <keep draft / do not merge / do not close issue / ...>
+- **Label:** ACTION REQUIRED / BLOCKED / WAITING_HUMAN / ...
+```
+
+## Controller-Agent Interaction Loop
+
+The normal execution loop is:
+
+1. **Program Controller writes directive** to GitHub (issue or PR comment).
+2. **Agent runs `SYNC_FROM_GITHUB`.**
+3. **Agent reads latest authorized directives.**
+4. **Agent determines whether action is required.** If the latest directive is status-only, the agent reports status and stops.
+5. **Agent acts only within the stated scope.**
+6. **Agent reports back** on the issue or PR.
+7. **Program Controller reviews the report.**
+8. **Program Controller decides next state:** request changes, trigger Codex review, request human sign-off, or unblock the next repo.
+
+## SYNC_FROM_GITHUB Semantics
+
+`SYNC_FROM_GITHUB` is a **pull-based sync command**. It does not automatically authorize file changes.
+
+### What it does
+
+- Fetches the latest issue body, PR body, and comments from GitHub.
+- Rebuilds the agent's local understanding of the current state.
+
+### What it does not do
+
+- It does **not** bypass the requirement for an explicit `ACTION REQUIRED` directive.
+- It does **not** authorize the agent to modify files just because the sync succeeded.
+
+### Decision rule after sync
+
+| Latest directive | Agent action |
+|---|---|
+| `ACTION REQUIRED` | Execute within stated scope, then report. |
+| `BLOCKED` | Report blocker, stop. |
+| `WAITING_HUMAN` / `WAITING_CODEX` | Report waiting status, stop. |
+| `UNBLOCKED` | Resume previously blocked work if scope is still valid. |
+| No labeled directive | Report status only, do not modify files. |
+
+### Stale body override rule
+
+**Latest authorized GitHub control comments override stale issue or PR body text** for current operational directives. If an issue body says one thing but a recent comment says another, the comment wins.
+
+## Program Controller Pre-Flight Checklist
+
+Before telling Human Owner to start or re-run an agent, Program Controller should confirm:
+
+- [ ] The directive exists on the **target issue or PR**.
+- [ ] The directive includes **scope and expected output**.
+- [ ] The directive states **PR state rules**.
+- [ ] The directive is **discoverable by `SYNC_FROM_GITHUB`** (i.e., it is a public comment, not chat-only).
+
+## Reporting Rules
+
+### Before a PR exists
+
+If no PR has been opened yet, the agent must report progress and status **on the issue**.
+
+### After a PR exists
+
+Once a PR is opened, the agent must report **on the PR**. The issue may still receive high-level status updates, but detailed delivery summaries belong on the PR.
+
+### Transition rule
+
+When the agent creates a PR, it should post a final summary comment on the issue linking to the new PR, then continue reporting on the PR.
+
+## Agent-Specific Consumption Patterns
 
 | Agent | How It Consumes GitHub Control Plane |
 |---|---|
@@ -91,14 +187,14 @@ Local agents (Qoder, Codex App/IDE, Claude Code, Gemini CLI, Antigravity, OpenCl
 
 | Priority | Source | Ephemeral? |
 |---|---|---|
-| 1 | GitHub issues | Durable |
-| 2 | GitHub PRs | Durable |
-| 3 | GitHub issue/PR comments | Durable |
+| 1 | GitHub issue/PR comments (latest authorized) | Durable |
+| 2 | GitHub issues | Durable |
+| 3 | GitHub PRs | Durable |
 | 4 | Merged control documents (RFCs, ADRs, docs) | Durable |
 | 5 | Chat history | Ephemeral |
 | 6 | Local agent memory | Ephemeral |
 
-**Rule:** If there is a conflict between a GitHub comment and chat history, the GitHub comment wins.
+**Rule:** If there is a conflict between a GitHub comment and chat history, the GitHub comment wins. If there is a conflict between a recent comment and an older issue body, the recent comment wins.
 
 ## Reporting Format
 
@@ -130,3 +226,7 @@ The previous operating mode relied on copying prompts through chat. This is depr
 - Chat history cannot be referenced in cross-repo work.
 
 All agents must transition to consuming GitHub as the primary instruction surface.
+
+## Relationship to IEF-Protocol
+
+This document defines the **human-readable Program coordination protocol**. It is not the same as `IEF-Protocol` JSON schemas. If this interaction model later needs machine-readable messages, `IEF-Protocol` should define those objects in a separate Contract-Critical task.
