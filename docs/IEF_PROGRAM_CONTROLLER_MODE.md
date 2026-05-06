@@ -50,6 +50,38 @@ Chat history, session memory, and local agent state are ephemeral. They are not 
 
 **Rule:** No agent may operate above its authorized level without explicit Human Owner approval.
 
+## Human Owner Standing Delegation
+
+Human Owner may grant standing delegation to the Program Controller. This delegation is recorded as a durable GitHub comment and remains active until revoked or superseded by a later Human Owner comment.
+
+**Platform limitation:** Platform and tool-level confirmation prompts may still appear and cannot be bypassed by this delegation. The delegation governs IEF organizational authority, not local security controls.
+
+### Delegated levels
+
+| Level | Scope | Default | Conditions |
+|---|---|---|---|
+| **L0** | Read across all everwork-ai IEF repositories | Allowed | No additional authorization required. |
+| **L1** | Control-plane writes | Allowed by default | Issue comments, PR comments, review instructions, blocker/status comments, stale-thread judgments, `@codex review` triggers, human sign-off requests, downstream unblock/block directives. |
+| **L2** | IEF-Program documentation changes | Allowed via branch + PR | Program Controller may create and update PRs, but must not merge without human sign-off unless explicitly authorized. |
+| **L3** | Capability repo content changes | Allowed only with explicit directive | Requires a GitHub issue or PR directive defining scope, target files, and expected output. Program Controller may create branches, push commits, open/update PRs, and reply to review threads. Must not directly merge or close core issues without human approval. |
+| **L4** | Merge / close actions | Require explicit sign-off | Human Owner sign-off required unless the PR falls under a separately approved auto-merge rule. |
+
+### Prohibited actions
+
+Even under standing delegation, the Program Controller must not:
+
+- Delete repositories
+- Change organization permissions
+- Change secrets, tokens, or billing settings
+- Force-push
+- Change branch protection rules
+- Perform production deployment
+- Merge governance, protocol, or operations core contracts without human sign-off
+
+### Revocation
+
+Human Owner may revoke or supersede this delegation at any time by posting a new comment on the active program epic or the PR where the delegation was recorded.
+
 ## Program Controller Execution Contract
 
 The Program Controller must adhere to the following rules when directing agents.
