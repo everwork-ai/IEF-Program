@@ -28,8 +28,8 @@ All IEF agents operate under the **GitHub-first control plane** defined in [`IEF
 - Agents must not self-merge, self-close issues, or modify sibling repos.
 
 **SYNC_FROM_GITHUB startup sequence:**
-1. Read target issue for the current repo.
-2. Read related PRs.
+1. Read target issue body and **comment stream** for the current repo.
+2. Read related PR bodies and **comment streams**.
 3. Read latest Program Controller / Program Agent comments on the program epic.
 4. Read Codex review threads on the target PR.
 5. Read PR body and changed files.

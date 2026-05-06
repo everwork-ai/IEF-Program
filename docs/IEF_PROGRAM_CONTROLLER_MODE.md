@@ -14,7 +14,8 @@ Chat history, session memory, and local agent state are ephemeral. They are not 
 
 - **Responsibility:** L1 control-plane coordination.
 - **Authority:** Write issue comments, PR comments, review instructions, blocker/status comments, stale-thread judgments, `@codex review` triggers, human sign-off requests, and program issue coordination comments.
-- **Limitation:** Must not directly modify capability repo files, directly fix bugs in capability repos, directly merge PRs, directly close core issues, or modify governance/protocol/operations substantive content without explicit Human Owner approval.
+- **Limitation:** By default, must not directly modify capability repo files, directly fix bugs in capability repos, directly merge PRs, directly close core issues, or modify governance/protocol/operations substantive content.
+  - **Standing delegation exception:** Human Owner has granted conditional L3 authority under the standing delegation, but **only when** a GitHub issue or PR directive defines scope, target files, and expected output. For governance/protocol/operations core contracts, human sign-off is still required before merge. Without an explicit directive, capability repo edits remain prohibited.
 
 ### Program Agent
 
@@ -40,15 +41,17 @@ Chat history, session memory, and local agent state are ephemeral. They are not 
 - **Authority:** Post review comments, approve PRs with reactions, and flag issues.
 - **Limitation:** Does not modify files directly. Review output is advisory unless Program Controller or Human Owner elevates it to a blocker.
 
-## Permission Boundaries
+## Role Operating Boundaries
 
-| Level | Scope | Who | Examples |
-|---|---|---|---|
-| **L1** | Control-plane writes | Program Controller | Issue comments, PR comments, status updates, `@codex review` triggers, blocker declarations |
-| **L2** | Cross-repo reads and coordination | Program Agent | Read all repo issues/PRs, report cross-repo status, dispatch work to Repo Worker Agents |
-| **L3** | Single-repo implementation | Repo Worker Agent | File edits, branch creation, PR opening, Codex thread replies, test execution |
+These boundaries describe what each role is responsible for. They are independent of the numeric L0-L4 delegation levels defined in Human Owner Standing Delegation.
 
-**Rule:** No agent may operate above its authorized level without explicit Human Owner approval.
+| Role | Scope | Examples |
+|---|---|---|
+| **Program Controller** | Control-plane writes | Issue comments, PR comments, status updates, `@codex review` triggers, blocker declarations |
+| **Program Agent** | Cross-repo reads and coordination | Read all repo issues/PRs, report cross-repo status, dispatch work to Repo Worker Agents |
+| **Repo Worker Agent** | Single-repo implementation | File edits, branch creation, PR opening, Codex thread replies, test execution |
+
+**Rule:** No agent may operate outside its role boundary or delegated authority without explicit Human Owner approval.
 
 ## Human Owner Standing Delegation
 
@@ -159,7 +162,7 @@ The normal execution loop is:
 
 ### What it does
 
-- Fetches the latest issue body, PR body, and comments from GitHub.
+- Fetches the latest issue body, **issue comments**, PR body, **PR comments**, and Codex review threads from GitHub.
 - Rebuilds the agent's local understanding of the current state.
 
 ### What it does not do
@@ -175,6 +178,8 @@ The normal execution loop is:
 | `BLOCKED` | Report blocker, stop. |
 | `WAITING_HUMAN` / `WAITING_CODEX` | Report waiting status, stop. |
 | `UNBLOCKED` | Resume previously blocked work if scope is still valid. |
+| `READY_FOR_PROGRAM_REVIEW` | Agent has delivered; report delivered status and wait for Program Controller review. |
+| `READY_FOR_HUMAN_SIGNOFF` | Program Controller approves; report waiting-human status and wait for Human Owner sign-off. |
 | No labeled directive | Report status only, do not modify files. |
 
 ### Stale body override rule
@@ -226,7 +231,13 @@ When the agent creates a PR, it should post a final summary comment on the issue
 | 5 | Chat history | Ephemeral |
 | 6 | Local agent memory | Ephemeral |
 
-**Rule:** If there is a conflict between a GitHub comment and chat history, the GitHub comment wins. If there is a conflict between a recent comment and an older issue body, the recent comment wins.
+**Rule:** If there is a conflict between a GitHub comment and chat history, the GitHub comment wins. If there is a conflict between a recent comment and an older issue body, the recent comment wins **for current operational directives only**.
+
+**Scope of precedence:**
+- Merged RFCs, ADRs, and control documents are authoritative for **standing policy, architecture, contracts, and governance**.
+- Latest authorized GitHub comments override stale issue/PR bodies **only for current operational directives** within an active issue or PR.
+- Comments must **not** override merged contracts, governance profiles, Protocol schemas, or ADR/RFC decisions.
+- If a comment needs to change standing policy, it must create or update a PR against the relevant durable document.
 
 ## Reporting Format
 
