@@ -222,21 +222,17 @@ When the agent creates a PR, it should post a final summary comment on the issue
 
 ## Source of Truth Hierarchy
 
-| Priority | Source | Ephemeral? |
+| Priority | Source | Applies To |
 |---|---|---|
-| 1 | GitHub issue/PR comments (latest authorized) | Durable |
-| 2 | GitHub issues | Durable |
-| 3 | GitHub PRs | Durable |
-| 4 | Merged control documents (RFCs, ADRs, docs) | Durable |
-| 5 | Chat history | Ephemeral |
-| 6 | Local agent memory | Ephemeral |
+| 1 | Merged RFCs / ADRs / control docs | Standing policy, architecture, contracts, governance, Protocol schemas, durable decisions |
+| 2 | Latest authorized GitHub issue/PR comments | Current operational directives within active issue/PR only |
+| 3 | Issue body / PR body | Baseline scope and delivery context |
+| 4 | Chat history / local memory | Non-authoritative unless reflected in GitHub |
 
-**Rule:** If there is a conflict between a GitHub comment and chat history, the GitHub comment wins. If there is a conflict between a recent comment and an older issue body, the recent comment wins **for current operational directives only**.
-
-**Scope of precedence:**
-- Merged RFCs, ADRs, and control documents are authoritative for **standing policy, architecture, contracts, and governance**.
-- Latest authorized GitHub comments override stale issue/PR bodies **only for current operational directives** within an active issue or PR.
-- Comments must **not** override merged contracts, governance profiles, Protocol schemas, or ADR/RFC decisions.
+**Rules:**
+- Merged RFCs, ADRs, and control documents are authoritative for standing policy. Comments must not override merged contracts, governance profiles, Protocol schemas, or ADR/RFC decisions.
+- Latest authorized GitHub comments override stale issue/PR bodies only for current operational directives within an active issue or PR.
+- If there is a conflict between a GitHub comment and chat history, the GitHub comment wins.
 - If a comment needs to change standing policy, it must create or update a PR against the relevant durable document.
 
 ## Reporting Format
