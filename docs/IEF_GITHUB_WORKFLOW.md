@@ -17,6 +17,24 @@ Issue created
   -> Issue closed
 ```
 
+## Agent Operating Mode
+
+All IEF agents operate under the **GitHub-first control plane** defined in [`IEF_PROGRAM_CONTROLLER_MODE.md`](IEF_PROGRAM_CONTROLLER_MODE.md).
+
+**Key rules:**
+- GitHub issues, PRs, and comments are the durable source of truth. Chat history is ephemeral and must not be treated as authoritative.
+- Local agents (Qoder, Codex App/IDE, Claude Code, Gemini CLI, Antigravity, OpenClaw/Hermes-style agents) must run in `SYNC_FROM_GITHUB` mode.
+- Agents only modify files when a GitHub issue or PR comment explicitly requires action. Status/waiting/blocked comments do not authorize file changes.
+- Repo Worker Agents must not self-merge, self-close issues, or modify sibling repos. Program Controller may perform scoped L3 capability-repo changes only when a GitHub directive defines the target repo, scope, target files, and expected output under the Human Owner Standing Delegation.
+
+**SYNC_FROM_GITHUB startup sequence:**
+1. Read target issue body and **comment stream** for the current repo.
+2. Read related PR bodies and **comment streams** (including non-review PR comments on the target PR).
+3. Read latest Program Controller / Program Agent comments on the program epic.
+4. Read Codex review threads on the target PR.
+5. Read PR body and changed files.
+6. Read main branch docs / schemas / templates.
+
 ## Step 1 — Issue Creation
 
 Every official task must start as a GitHub issue.

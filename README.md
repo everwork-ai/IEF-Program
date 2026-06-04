@@ -55,6 +55,7 @@ It is not a runtime capability layer. It is the project-of-projects control repo
 | [Roadmap](docs/IEF_ROADMAP.md) | v0 milestones: Setup → Core Loop → Protocol → Hardening |
 | [Startup Plan](docs/IEF_STARTUP_PLAN.md) | Bootstrap sequence and dependency order |
 | [Agent Rules](docs/IEF_AGENT_RULES.md) | AI agent working rules across repos |
+| [Program Controller Mode](docs/IEF_PROGRAM_CONTROLLER_MODE.md) | GitHub-first control plane, roles, L1/L2/L3 boundaries, SYNC_FROM_GITHUB |
 | [GitHub Workflow](docs/IEF_GITHUB_WORKFLOW.md) | Issue → PR → review → merge flow |
 | [Status Report](docs/IEF_STATUS_REPORT.md) | Current status of each repo |
 | [Definition of Done](docs/IEF_DEFINITION_OF_DONE.md) | Acceptance criteria per governance profile |
